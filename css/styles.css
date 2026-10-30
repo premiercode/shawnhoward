@@ -182,20 +182,31 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* Shading over the left half keeps the title legible on the backdrop */
 .hero::after {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(90deg, rgba(21, 17, 13, .7) 0%, rgba(21, 17, 13, .35) 35%, rgba(21, 17, 13, 0) 55%);
+  background:
+    linear-gradient(0deg, rgba(21, 17, 13, .95) 0%, rgba(21, 17, 13, 0) 40%),
+    linear-gradient(90deg, rgba(21, 17, 13, .7) 0%, rgba(21, 17, 13, .35) 35%, rgba(21, 17, 13, 0) 55%);
 }
 /* Sharp photo sits right of the name so the driver and coach stay clear of the title,
    and its left edge fades into the backdrop */
-.hero__media { position: absolute; inset: 0 0 0 30%; z-index: -1; overflow: hidden; }
+.hero__media {
+  position: absolute; top: 0; bottom: 0; z-index: -1; overflow: hidden;
+  /* Below 1920px: right 70% of the hero. Wider: stays inside a centered
+     1920px frame so the photo lines up with the content column. */
+  left: max(30%, calc(50% - 384px));
+  right: max(0px, calc(50% - 960px));
+}
+@media (min-width: 1921px) {
+  .hero .hero__media img {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 35%, #000 82%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 35%, #000 82%, transparent 100%);
+  }
+  .hero__caption { right: calc(50% - 960px + var(--gutter)); }
+}
 .hero__media img {
   width: 100%; height: 100%; object-fit: cover; object-position: 8% 40%;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 40%);
   mask-image: linear-gradient(90deg, transparent 0%, #000 40%);
   animation: hero-drift 18s var(--ease) both;
-}
-.hero__media::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(0deg, rgba(21, 17, 13, .95) 0%, rgba(21, 17, 13, 0) 40%);
 }
 @keyframes hero-drift { from { transform: scale(1.08); } to { transform: scale(1); } }
 
@@ -435,7 +446,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .credits__meta { grid-column: 2 / -1; grid-row: 2; text-align: left; margin-top: -8px; }
 }
 @media (max-width: 640px) {
-  .hero__media { inset: 0; }
+  .hero__media { left: 0; right: 0; }
   .hero__media img { object-position: 52% 30%; -webkit-mask-image: none; mask-image: none; }
   .hero__media::after {
     background: linear-gradient(0deg, rgba(21, 17, 13, .97) 10%, rgba(21, 17, 13, .55) 60%, rgba(21, 17, 13, .35) 100%);
