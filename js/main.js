@@ -35,7 +35,23 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && nav.classList.contains('is-open')) { setOpen(false); toggle.focus(); }
     });
+    nav.addEventListener('focusout', (e) => {
+      if (nav.classList.contains('is-open') && !nav.contains(e.relatedTarget) && e.relatedTarget !== toggle) setOpen(false);
+    });
     window.matchMedia('(min-width: 901px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
+  }
+
+  /* --- Ticker: visible pause control (WCAG 2.2.2) ----------------- */
+  function initTicker() {
+    const ticker = document.querySelector('[data-ticker]');
+    const button = document.querySelector('[data-ticker-toggle]');
+    if (!ticker || !button || prefersReducedMotion) return;
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      const paused = ticker.classList.toggle('is-paused');
+      button.setAttribute('aria-pressed', String(paused));
+      button.textContent = paused ? 'Play' : 'Pause';
+    });
   }
 
   /* --- Reveal sections as they scroll into view -------------------- */
@@ -63,26 +79,38 @@
     const form = document.querySelector('[data-inquiry]');
     if (!form) return;
     const status = form.querySelector('[data-status]');
+    const messages = {
+      name: 'Enter your name.',
+      email: 'Enter an email like name@example.com.',
+      type: 'Choose the type of inquiry.',
+      message: 'Tell us a little about the job.',
+    };
+
+    const showError = (field, text) => {
+      const error = document.getElementById(field.getAttribute('aria-describedby'));
+      field.setAttribute('aria-invalid', String(Boolean(text)));
+      if (error) { error.textContent = text; error.hidden = !text; }
+    };
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       if (form.elements.website.value) return; // bot filled the honeypot
 
-      let firstInvalid = null;
+      const invalid = [];
       form.querySelectorAll('[required]').forEach((field) => {
         const ok = field.value.trim() !== '' && field.checkValidity();
-        field.setAttribute('aria-invalid', String(!ok));
-        if (!ok && !firstInvalid) firstInvalid = field;
+        showError(field, ok ? '' : messages[field.name]);
+        if (!ok) invalid.push(field);
       });
-      if (firstInvalid) {
-        status.textContent = 'Please fill in your name, a valid email, the type of inquiry and a short description.';
-        firstInvalid.focus();
+      if (invalid.length) {
+        status.textContent = invalid.length === 1 ? '1 field needs attention.' : `${invalid.length} fields need attention.`;
+        invalid[0].focus();
         return;
       }
 
       status.textContent = 'Thanks! This is a design preview, so the form isn\'t connected yet. At launch, inquiries will go straight to Shawn.';
       form.reset();
-      form.querySelectorAll('[aria-invalid]').forEach((f) => f.removeAttribute('aria-invalid'));
+      form.querySelectorAll('[required]').forEach((f) => { showError(f, ''); f.removeAttribute('aria-invalid'); });
     });
   }
 
@@ -92,6 +120,7 @@
 
   initHeader();
   initMobileNav();
+  initTicker();
   initReveal();
   initInquiry();
   initYear();

@@ -64,6 +64,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .skip-link:focus { top: 12px; }
 
 :focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; }
+/* Brass is too faint on paper; use coach red for focus in light sections */
+.about :focus-visible, .services :focus-visible, .clinics :focus-visible { outline-color: var(--coach); }
 
 /* --- Type helpers --------------------------------------------------- */
 .eyebrow {
@@ -145,7 +147,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .primary-nav a:not(.btn):hover::after { transform: scaleX(1); }
 
 .menu-toggle {
-  display: none; background: none; border: 0; color: inherit; padding: 8px; cursor: pointer;
+  order: 2; display: none; background: none; border: 0; color: inherit; padding: 8px; cursor: pointer;
 }
 .menu-toggle .icon { width: 28px; height: 28px; }
 
@@ -153,6 +155,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .js .menu-toggle { display: inline-flex; }
   .js .primary-nav {
     position: fixed; inset: 72px 0 auto; background: var(--ink);
+    max-height: calc(100dvh - 72px); overflow-y: auto;
     padding: 24px var(--gutter) 32px; border-top: 1px solid rgba(217, 164, 65, .25);
     transform: translateY(-8px); opacity: 0; visibility: hidden;
     transition: opacity .2s, transform .2s, visibility .2s;
@@ -211,8 +214,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @keyframes hero-drift { from { transform: scale(1.08); } to { transform: scale(1); } }
 
 .hero__caption {
-  position: absolute; right: var(--gutter); bottom: 86px; z-index: 1;
-  font: 400 .72rem var(--font-label); text-transform: uppercase; letter-spacing: .18em;
+  position: absolute; right: var(--gutter); bottom: 86px; z-index: 1; margin: 0;
+  font: 400 .8rem var(--font-label); text-transform: uppercase; letter-spacing: .18em;
   color: var(--on-dark-muted);
 }
 .hero__content { padding-top: 140px; padding-bottom: clamp(56px, 9vh, 110px); }
@@ -234,10 +237,22 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* Ticker */
 .ticker {
+  display: flex; align-items: center;
   border-top: 1px solid rgba(217, 164, 65, .35);
   background: rgba(21, 17, 13, .85);
-  overflow: hidden; white-space: nowrap;
+  white-space: nowrap;
 }
+.ticker__viewport { flex: 1; min-width: 0; overflow: hidden; }
+.ticker.is-paused .ticker__track,
+.ticker:hover .ticker__track,
+.ticker:focus-within .ticker__track { animation-play-state: paused; }
+.ticker__toggle {
+  flex: none; margin: 0 var(--gutter) 0 12px; padding: 8px 14px;
+  background: none; border: 1px solid rgba(217, 164, 65, .6); border-radius: var(--radius);
+  color: var(--brass); cursor: pointer;
+  font: 500 .75rem var(--font-label); text-transform: uppercase; letter-spacing: .16em;
+}
+.ticker__toggle:hover { background: rgba(217, 164, 65, .12); }
 .ticker__track { display: flex; width: max-content; animation: ticker 48s linear infinite; }
 .ticker__list { display: flex; }
 .ticker__list li {
@@ -401,21 +416,28 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .inquiry { display: grid; gap: 18px; }
 .inquiry__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .inquiry label {
-  display: grid; gap: 8px;
+  display: grid; gap: 8px; align-content: start;
   font: 500 .75rem var(--font-label); text-transform: uppercase; letter-spacing: .18em; color: var(--on-dark-muted);
 }
 .inquiry input, .inquiry select, .inquiry textarea {
   width: 100%; padding: 14px 16px;
   background: var(--ink); color: var(--on-dark);
-  border: 1px solid rgba(243, 235, 221, .2); border-radius: var(--radius);
+  border: 1px solid rgba(243, 235, 221, .55); border-radius: var(--radius);
   font: 400 1rem var(--font-body); letter-spacing: 0; text-transform: none;
   transition: border-color .2s;
 }
-.inquiry input:focus, .inquiry select:focus, .inquiry textarea:focus { border-color: var(--brass); outline: none; box-shadow: 0 0 0 3px rgba(217, 164, 65, .25); }
+.inquiry ::placeholder { color: var(--on-dark-muted); opacity: 1; }
+.inquiry input:focus, .inquiry select:focus, .inquiry textarea:focus { border-color: var(--brass); outline: 2px solid transparent; outline-offset: 2px; box-shadow: 0 0 0 3px rgba(217, 164, 65, .25); }
 .inquiry input[aria-invalid="true"], .inquiry select[aria-invalid="true"], .inquiry textarea[aria-invalid="true"] { border-color: #e0614f; }
 .inquiry textarea { resize: vertical; min-height: 140px; }
 .inquiry .btn { justify-self: start; }
 .inquiry__status { margin: 0; min-height: 1.5em; color: var(--brass); }
+.inquiry__note { margin: 0; font-size: .9rem; color: var(--on-dark-muted); }
+.req { color: var(--brass); }
+.field-error, .field-hint { font: 500 .85rem/1.4 var(--font-body); letter-spacing: 0; text-transform: none; }
+.field-error { color: #f08a7a; }
+.field-error::before { content: "⚠ "; }
+.field-hint { color: var(--on-dark-muted); font-weight: 400; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
 /* --- Footer --------------------------------------------------------- */
@@ -448,8 +470,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 640px) {
   .hero__media { left: 0; right: 0; }
   .hero__media img { object-position: 52% 30%; -webkit-mask-image: none; mask-image: none; }
-  .hero__media::after {
-    background: linear-gradient(0deg, rgba(21, 17, 13, .97) 10%, rgba(21, 17, 13, .55) 60%, rgba(21, 17, 13, .35) 100%);
+  .hero::after {
+    background: linear-gradient(0deg, rgba(21, 17, 13, .97) 10%, rgba(21, 17, 13, .7) 55%, rgba(21, 17, 13, .45) 100%);
   }
   .hero__caption { display: none; }
   .live__grid, .services__grid, .film__strip, .inquiry__row { grid-template-columns: 1fr; }
@@ -465,5 +487,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
   .js .reveal { opacity: 1; transform: none; }
-  .ticker { overflow-x: auto; }
+  .ticker__track { width: auto; }
+  .ticker__list { flex-wrap: wrap; justify-content: center; }
+  .ticker__list[aria-hidden="true"], .ticker__toggle { display: none; }
 }
+
+/* Error and hint text sit outside the label so they aren't read as part of the field name */
+.field { display: grid; gap: 6px; align-content: start; }

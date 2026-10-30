@@ -45,6 +45,10 @@
       <span class="brand__mark" aria-hidden="true">SH</span>
       <span class="brand__name">Shawn Howard</span>
     </a>
+    <button class="menu-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" data-menu-toggle hidden>
+      <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+      <span class="visually-hidden">Menu</span>
+    </button>
     <nav class="primary-nav" id="primary-nav" aria-label="Primary" data-nav>
       <ul>
         <li><a href="#about">About</a></li>
@@ -55,10 +59,6 @@
         <li><a class="btn btn--brass btn--sm" href="#contact">Book Shawn</a></li>
       </ul>
     </nav>
-    <button class="menu-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" data-menu-toggle hidden>
-      <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
-      <span class="visually-hidden">Menu</span>
-    </button>
   </div>
 </header>
 
@@ -70,8 +70,8 @@
 <section class="hero" id="top" aria-labelledby="hero-title">
   <figure class="hero__media">
     <img src="assets/img/hero-arena-stagecoach.webp" alt="A red Concord stagecoach with yellow wheels pulled by a team of black horses in front of a packed rodeo arena" width="1280" height="720" fetchpriority="high">
-    <figcaption class="hero__caption">Six-up stagecoach · National Western Stock Show</figcaption>
   </figure>
+  <p class="hero__caption">Six-up stagecoach · National Western Stock Show</p>
   <div class="hero__content container">
     <p class="eyebrow eyebrow--brass">Choctaw Nation of Oklahoma · Ringling, OK</p>
     <h1 class="hero__title" id="hero-title">Shawn<br>Howard</h1>
@@ -83,7 +83,8 @@
     </div>
   </div>
 
-  <div class="ticker" aria-label="Highlights">
+  <section class="ticker" aria-label="Highlights" data-ticker>
+    <div class="ticker__viewport">
     <div class="ticker__track">
       <ul class="ticker__list">
         <li>National Finals Rodeo</li><li>South Point Las Vegas</li><li>National Western Stock Show</li><li>Rodeo 250 · National Mall</li><li>Buffalo Bill's Wild West Show</li><li>1883</li><li>Horizon</li><li>Megalopolis</li><li>Wild Wild West</li>
@@ -92,7 +93,9 @@
         <li>National Finals Rodeo</li><li>South Point Las Vegas</li><li>National Western Stock Show</li><li>Rodeo 250 · National Mall</li><li>Buffalo Bill's Wild West Show</li><li>1883</li><li>Horizon</li><li>Megalopolis</li><li>Wild Wild West</li>
       </ul>
     </div>
-  </div>
+    </div>
+    <button class="ticker__toggle" type="button" aria-pressed="false" data-ticker-toggle hidden>Pause</button>
+  </section>
 </section>
 
 <!-- ===================================================================
@@ -310,14 +313,15 @@
 
     <!-- PLACEHOLDER: wire to a form endpoint with reCAPTCHA v3 (site key + server-side verify) at launch -->
     <form class="inquiry reveal" action="#" method="post" novalidate data-inquiry>
+      <p class="inquiry__note"><span aria-hidden="true">*</span> Required</p>
       <div class="inquiry__row">
-        <label>Name<input type="text" name="name" autocomplete="name" required></label>
-        <label>Email<input type="email" name="email" autocomplete="email" required></label>
+        <div class="field"><label><span>Name <span class="req" aria-hidden="true">*</span></span><input type="text" name="name" autocomplete="name" required aria-describedby="err-name"></label><span class="field-error" id="err-name" hidden></span></div>
+        <div class="field"><label><span>Email <span class="req" aria-hidden="true">*</span></span><input type="email" name="email" autocomplete="email" required aria-describedby="err-email"></label><span class="field-error" id="err-email" hidden></span></div>
       </div>
       <div class="inquiry__row">
         <label>Organization / production<input type="text" name="organization" autocomplete="organization"></label>
-        <label>Type of inquiry
-          <select name="type" required>
+        <div class="field"><label><span>Type of inquiry <span class="req" aria-hidden="true">*</span></span>
+          <select name="type" required aria-describedby="err-type">
             <option value="">Choose one…</option>
             <option>Film or TV production</option>
             <option>Arena event or stagecoach appearance</option>
@@ -325,14 +329,13 @@
             <option>Team training</option>
             <option>Media or press</option>
             <option>Other</option>
-          </select>
-        </label>
+          </select></label><span class="field-error" id="err-type" hidden></span></div>
       </div>
       <div class="inquiry__row">
-        <label>Dates<input type="text" name="dates" placeholder="e.g. June 12–14, 2027"></label>
+        <div class="field"><label>Dates<input type="text" name="dates" aria-describedby="hint-dates"></label><span class="field-hint" id="hint-dates">e.g. June 12–14, 2027</span></div>
         <label>Location<input type="text" name="location" placeholder="City, state"></label>
       </div>
-      <label>Tell us about the job<textarea name="message" rows="5" required></textarea></label>
+      <div class="field"><label><span>Tell us about the job <span class="req" aria-hidden="true">*</span></span><textarea name="message" rows="5" required aria-describedby="err-message"></textarea></label><span class="field-error" id="err-message" hidden></span></div>
       <!-- Honeypot: hidden from people, bots fill it in -->
       <div class="hp" aria-hidden="true">
         <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
@@ -359,5 +362,15 @@
   </div>
 </footer>
 
+<!-- Design preview: option switcher (remove at launch) -->
+<nav class="opt-switch" aria-label="Design options"><a href="./" aria-current="page"><b>A</b> Original</a><a href="option-b/"><b>B</b> Cinematic</a><a href="option-c/"><b>C</b> Broadsheet</a></nav>
+<style>
+.opt-switch{position:fixed;left:12px;bottom:12px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:999px;background:rgba(17,14,11,.92);box-shadow:0 6px 24px rgba(0,0,0,.35);font:500 12px/1 system-ui,-apple-system,sans-serif}
+.opt-switch a{color:#e9dfcf;text-decoration:none;padding:8px 12px;border-radius:999px;white-space:nowrap}
+.opt-switch a:hover{background:rgba(255,255,255,.12)}
+.opt-switch a[aria-current]{background:#d9a441;color:#15110d}
+.opt-switch a:focus-visible{outline:2px solid #fff;outline-offset:2px}
+@media (max-width:420px){.opt-switch a{padding:8px 9px}}
+</style>
 </body>
 </html>
