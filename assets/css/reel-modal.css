@@ -1,0 +1,33 @@
+/* Demo reel modal (see assets/js/reel-modal.js). Shared by both options. */
+.reel-modal {
+  width: min(100% - 2rem, 1200px);
+  max-width: none; max-height: none;
+  margin: auto; padding: 0; border: 0;
+  background: transparent; color: #f3ede1;
+  overflow: visible;
+}
+.reel-modal:focus, .reel-modal__frame iframe:focus { outline: none; }
+.reel-modal::backdrop { background: rgb(10 8 6 / .9); }
+.reel-modal__frame {
+  aspect-ratio: 16 / 9;
+  width: min(100%, (100dvh - 7rem) * 16 / 9); /* keep 16:9 on short screens */
+  margin-inline: auto;
+  background: #000;
+  box-shadow: 0 24px 80px rgb(0 0 0 / .6);
+}
+.reel-modal__frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+.reel-modal__close {
+  position: absolute; right: 0; bottom: 100%;
+  display: inline-flex; align-items: center; gap: .5rem;
+  min-height: 44px; padding: .5rem 0 .5rem .75rem;
+  border: 0; background: none; color: inherit; cursor: pointer;
+  font: 600 .75rem/1 system-ui, -apple-system, sans-serif;
+  letter-spacing: .16em; text-transform: uppercase;
+}
+.reel-modal__close:hover { color: #fff; }
+.reel-modal__close:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .reel-modal[open] { animation: reel-in .25s ease-out; }
+  @keyframes reel-in { from { opacity: 0; transform: scale(.97); } }
+}

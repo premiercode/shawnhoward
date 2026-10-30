@@ -20,6 +20,8 @@
   <!-- Flag JS early so reveal/roll styles only apply when JS can control them -->
   <script>document.documentElement.classList.add('js');</script>
   <script src="main.js" defer></script>
+  <link rel="stylesheet" href="../assets/css/reel-modal.css">
+  <script src="../assets/js/reel-modal.js" defer></script>
 </head>
 <body>
 
@@ -94,7 +96,7 @@
     <p class="opening__lede">Official stagecoach driver for the National Finals Rodeo and South Point. Horse-drawn vehicle specialist for film and television, from <em>Wild Wild West</em> to <em>1883</em> and <em>Horizon</em>.</p>
     <div class="opening__actions">
       <a class="btn btn--bone" href="#contact">Book a team <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      <a class="btn btn--ghost" href="https://www.youtube.com/@shawnhoward4538" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg> Watch him drive<span class="visually-hidden"> (opens YouTube in a new tab)</span></a>
+      <a class="btn btn--ghost" href="https://vimeo.com/1228097908" data-reel="1228097908"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg> Watch him drive<span class="visually-hidden"> (demo reel video)</span></a>
     </div>
 
     <!-- Poster "billing block": static, condensed, centred -->
@@ -415,7 +417,7 @@
 </footer>
 
 <!-- Design preview: option switcher (remove at launch) -->
-<nav class="opt-switch" aria-label="Design options"><a href="../"><b>A</b> Original</a><a href="../option-b/" aria-current="page"><b>B</b> Cinematic</a><a href="../option-c/"><b>C</b> Broadsheet</a></nav>
+<nav class="opt-switch" aria-label="Design options"><a href="../option-b/" aria-current="page"><b>B</b> Cinematic</a><a href="../option-c/"><b>C</b> Broadsheet</a></nav>
 <style>
 .opt-switch{position:fixed;left:12px;bottom:12px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:999px;background:rgba(17,14,11,.92);box-shadow:0 6px 24px rgba(0,0,0,.35);font:500 12px/1 system-ui,-apple-system,sans-serif}
 .opt-switch a{color:#e9dfcf;text-decoration:none;padding:8px 12px;border-radius:999px;white-space:nowrap}
