@@ -173,17 +173,29 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   background: var(--ink); color: var(--on-dark);
   isolation: isolate; overflow: hidden;
 }
-/* Photo sits right of the name so the driver and coach stay clear of the title */
+/* Full-bleed blurred arena behind everything, so wide screens never show an empty band */
+.hero::before {
+  content: ""; position: absolute; inset: -60px; z-index: -2;
+  background: url("../assets/img/hero-arena-stagecoach.webp") 35% 40% / cover no-repeat;
+  filter: blur(30px) brightness(.42) saturate(1.15);
+}
+/* Shading over the left half keeps the title legible on the backdrop */
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(21, 17, 13, .7) 0%, rgba(21, 17, 13, .35) 35%, rgba(21, 17, 13, 0) 55%);
+}
+/* Sharp photo sits right of the name so the driver and coach stay clear of the title,
+   and its left edge fades into the backdrop */
 .hero__media { position: absolute; inset: 0 0 0 30%; z-index: -1; overflow: hidden; }
 .hero__media img {
   width: 100%; height: 100%; object-fit: cover; object-position: 8% 40%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 40%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 40%);
   animation: hero-drift 18s var(--ease) both;
 }
 .hero__media::after {
   content: ""; position: absolute; inset: 0;
-  background:
-    linear-gradient(90deg, rgba(21, 17, 13, 1) 0%, rgba(21, 17, 13, .55) 30%, rgba(21, 17, 13, 0) 60%),
-    linear-gradient(0deg, rgba(21, 17, 13, .95) 0%, rgba(21, 17, 13, 0) 40%);
+  background: linear-gradient(0deg, rgba(21, 17, 13, .95) 0%, rgba(21, 17, 13, 0) 40%);
 }
 @keyframes hero-drift { from { transform: scale(1.08); } to { transform: scale(1); } }
 
@@ -424,7 +436,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 @media (max-width: 640px) {
   .hero__media { inset: 0; }
-  .hero__media img { object-position: 52% 30%; }
+  .hero__media img { object-position: 52% 30%; -webkit-mask-image: none; mask-image: none; }
   .hero__media::after {
     background: linear-gradient(0deg, rgba(21, 17, 13, .97) 10%, rgba(21, 17, 13, .55) 60%, rgba(21, 17, 13, .35) 100%);
   }
